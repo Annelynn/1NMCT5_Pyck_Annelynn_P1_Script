@@ -13,7 +13,7 @@ class DbClass:
         self.__cursor = self.__connection.cursor()
 
     def getDataFromDatabase(self, tablename):
-        #krijg alle data uit een tabel
+        #get all data from table
         sqlQuery = "SELECT * FROM " + tablename
         
         self.__cursor.execute(sqlQuery)
@@ -21,12 +21,13 @@ class DbClass:
         self.__cursor.close()
         return result
 
-    def getDataFromDatabaseWithCondition(self, tablename, columnname, voorwaarde):
-        # krijg enkel de data waarvan de voorwaarde werd voldaan
+    def getDataFromDatabaseWithCondition(self, tablename, columnname, condition):
+        # receive data only when condition is fulfilled
 
         sqlQuery = "SELECT * FROM " + tablename + " WHERE " + columnname + " = '{param1}'"
-        # Combineren van de query en parameter
-        sqlCommand = sqlQuery.format(param1=voorwaarde)
+
+        # combine query and parameter
+        sqlCommand = sqlQuery.format(param1=condition)
         
         self.__cursor.execute(sqlCommand)
         result = self.__cursor.fetchall()
@@ -34,26 +35,27 @@ class DbClass:
         return result
 
     def setDataToDatabase(self, tablename, *values):
-        # creëer een nieuwe rij,
-        # let op! alle waarden die meegegeven worden moeten in dezelfde volgorde staan als de kolommen
-        # ook moeten er evenveel waarden als kolommen meegegeven worden!
+        # create new row
+        # attention! all values need to be in the same order as the columns
+        # attention2! the number of values should match the number of columns
 
-        # voorbeeld voeg gebruiker toe: setDataToDatabase("Gebruiker", "0", "voornaam", "naam", "voornaam.naam@iets.be", "wachtwoord", "geleende boeken")
-        # merk op dat de tweede paramater en dus de eerste value genegeerd wordt bij een auto-increment
+        #e.g. add user: setDataToDatabase("User", "0", "firstName", "name", "firstName.name@something.com", "password", "borrowedBooks")
+        # notice how parameters added to a column with an auto-increment do not get added to the table
 
         sqlQuery = "INSERT INTO " + tablename + " () VALUES ({param1})"
 
-        #lege lijst aanmaken
+        #create empty list
         newValuesList = []
-        # elke value dat werd meegegeven moet omringd worden door single quotes
+
+        # every value should be surrounded with single quotes
         for value in values:
             newValue = "\'" + value + "\'"
             newValuesList.append(newValue)
 
-        # moet aan sql worden meegegeven als een string en niet als een list
+        # convert list to string with commas between different values
         newValuesString = str(newValuesList).strip('[]')
 
-        # Combineren van de query en parameter
+        # combine query and parameter
         sqlCommand = sqlQuery.format(param1=newValuesString)
 
         self.__cursor.execute(sqlCommand)
@@ -61,12 +63,12 @@ class DbClass:
         self.__cursor.close()
 
     def updateDataWithCondition(self, tablename, columnname, updatevalue, conditioncolumn, conditionvalue):
-        # tablename = naam van tabel waar er iets moet veranderd worden
-        # columname = naam van kolom waar er iets moet veranderd worden
-        # updatevalue = nieuwe waarde die de oude moet vervangen
-        # conditioncolumn = kolomnaam waar een voorwaarde aan verbonden is
-        # conditionvalue = waarde van het veld in die kolom
-        # voorbeeld naam aanpassen van gebruiker met ID=1: updateDataWithCondition("Gebruiker", "Naam", "Test", "GebruikerID", "1")
+        # tablename = name of table where something needs to be changed
+        # columname = name of column where something needs to be changed
+        # updatevalue = new value to replace old one
+        # conditioncolumn = columnname where the condition applies
+        # conditionvalue = value of condition
+        # e.g. edit name of user with ID=1: updateDataWithCondition("User", "Name", "Test", "userID", "1")
         sqlQuery = "UPDATE " + tablename + " SET " + columnname + " = \"" + updatevalue + "\" WHERE " + conditioncolumn + " = \"" + conditionvalue + "\""
 
         self.__cursor.execute(sqlQuery)
