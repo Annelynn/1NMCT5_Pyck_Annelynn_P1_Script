@@ -1,17 +1,12 @@
-#from model.DbClass import DbClass
+from model.DbClass import DbClass
+from model.BarcodeScanner import BarcodeScanner
 
-#database = DbClass()
+database = DbClass()
 
-import serial
-f = open ('/dev/hidraw0', 'rb')
-try:
-    while 1:
-        buffer = f.read(8)
-        #for c in buffer:
-            #print (c)
-            #print(",")
-        print(buffer)
+BS = BarcodeScanner()
+barcode = BS.leesBarcode()
 
-except KeyboardInterrupt:
-    print("Gelukt!")
+if(barcode != ""):
+    boek = database.getDataFromDatabaseWithCondition("Boek", "Barcode", "&$%\'$!$\"&")
+    print(boek)
 
