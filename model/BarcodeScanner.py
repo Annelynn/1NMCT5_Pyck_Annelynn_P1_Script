@@ -3,7 +3,7 @@ class BarcodeScanner():
     def __init__(self, poort='/dev/hidraw0', modus='rb'):
         self.buffer = open(poort, modus)   #barcode scanner gets used as keyboard
 
-    def leesBarcode(self):
+    def readBarcode(self):
         # create empty variable
         barcode = ""
 
