@@ -15,10 +15,9 @@ class DbClass:
     def getDataFromDatabase(self, tablename):
         #get all data from table
         sqlQuery = "SELECT * FROM " + tablename
-        
+
         self.__cursor.execute(sqlQuery)
         result = self.__cursor.fetchall()
-        self.__cursor.close()
         return result
 
     def getDataFromDatabaseWithCondition(self, tablename, columnname, condition):
@@ -28,10 +27,9 @@ class DbClass:
 
         # combine query and parameter
         sqlCommand = sqlQuery.format(param1=condition)
-        
+
         self.__cursor.execute(sqlCommand)
         result = self.__cursor.fetchall()
-        self.__cursor.close()
         return result
 
     def setDataToDatabase(self, tablename, *values):
@@ -60,7 +58,6 @@ class DbClass:
 
         self.__cursor.execute(sqlCommand)
         self.__connection.commit()
-        self.__cursor.close()
 
     def updateDataWithCondition(self, tablename, columnname, updatevalue, conditioncolumn, conditionvalue):
         # tablename = name of table where something needs to be changed
@@ -73,4 +70,7 @@ class DbClass:
 
         self.__cursor.execute(sqlQuery)
         self.__connection.commit()
+
+    # if cursor would be closed in every function, only one function can be executed on one instance
+    def closeCursor(self):
         self.__cursor.close()

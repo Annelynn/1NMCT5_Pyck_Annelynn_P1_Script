@@ -4,15 +4,17 @@ from model.LightSensors import LightSensors
 from time import sleep
 import datetime
 
-#database = DbClass()
+database = DbClass()
 #barcodeScanner = BarcodeScanner()
 lightSensors = LightSensors()
 
 # Test database
 # -------------------------------------------------------------------------------------
-# isbn = "9780747532743"
-# place=database.getDataFromDatabaseWithCondition("Place", "Book", read_isbn)[0][0]
-# print(place)
+isbn = "9780747532743"
+book = database.getDataFromDatabaseWithCondition("Book", "PlaceID", isbn)
+place=database.getDataFromDatabaseWithCondition("Place", "Book", isbn)
+print(book[0][8])
+print(place)
 # -------------------------------------------------------------------------------------
 
 
@@ -29,16 +31,18 @@ lightSensors = LightSensors()
 # Test light sensors
 # -------------------------------------------------------------------------------------
 
-beginDataLS = lightSensors.readChannels()
-right_place = 7
-startTime = datetime.datetime.now()
-print(startTime)
-sleep(1)
-
-
-detected_place = lightSensors.checkIfPlaceIsRight(beginDataLS, right_place)
-if(detected_place == False):
-    print("boek uitgeleend")
-else:
-    print(detected_place)
+# beginDataLS = lightSensors.readChannels()
+# print(beginDataLS)
+#
+# right_place = 6
+#
+# sleep(1)
+# #print(lightSensors.detectLightToDark(beginDataLS))
+#
+# detected_place = lightSensors.checkIfPlaceIsRight(beginDataLS, right_place)
+# print(detected_place)
+#
+# sleep(1)
+# detected_place = lightSensors.checkIfPlaceIsRight(beginDataLS, right_place)
+# print(detected_place)
 # -------------------------------------------------------------------------------------
