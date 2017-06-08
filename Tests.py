@@ -4,17 +4,21 @@ from model.LightSensors import LightSensors
 from time import sleep
 import datetime
 
+from model.LCDScreen import LCDScreen
+
 database = DbClass()
 #barcodeScanner = BarcodeScanner()
 lightSensors = LightSensors()
+LCDScreen = LCDScreen(21, 20, 16, 25, 24, 23)
+
 
 # Test database
 # -------------------------------------------------------------------------------------
-isbn = "9780747532743"
-book = database.getDataFromDatabaseWithCondition("Book", "PlaceID", isbn)
-place=database.getDataFromDatabaseWithCondition("Place", "Book", isbn)
-print(book[0][8])
-print(place)
+# isbn = "9780747532743"
+# book = database.getDataFromDatabaseWithCondition("Book", "PlaceID", isbn)
+# place=database.getDataFromDatabaseWithCondition("Place", "Book", isbn)
+# print(book[0][8])
+# print(place)
 # -------------------------------------------------------------------------------------
 
 
@@ -46,3 +50,9 @@ print(place)
 # detected_place = lightSensors.checkIfPlaceIsRight(beginDataLS, right_place)
 # print(detected_place)
 # -------------------------------------------------------------------------------------
+
+# Test LCD
+# --------------------------------------------------------------------------------------
+LCDScreen.show_text_on_second_line("test")
+sleep(10)
+LCDScreen.shut_down_LCD()

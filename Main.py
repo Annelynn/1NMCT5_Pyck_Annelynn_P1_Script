@@ -1,12 +1,14 @@
 from model.DbClass import DbClass
 from model.BarcodeScanner import BarcodeScanner
 from model.LightSensors import LightSensors
+from model.LCDScreen import LCDScreen
 from time import sleep
 
 try:
     barcodeScanner = BarcodeScanner()
     database = DbClass()
     lightSensors = LightSensors()
+    LCDScreen = LCDScreen(21, 20, 16, 25, 24, 23)
 
     detected_barcode = ""
     detected_isbn = ""
@@ -29,6 +31,8 @@ try:
             detected_isbn = barcodeScanner.convertBarcodeToISBN(detected_barcode)
             # this needs to be displayed on LCD
             print(detected_isbn)
+            #LCDScreen.show_text_on_first_line("Detected isbn: ")
+            LCDScreen.show_text_on_second_line(detected_isbn)
 
             right_place = database.getDataFromDatabaseWithCondition("Book", "ISBN13", detected_isbn)[0][8]
             # this needs to be displayed on LED strip
@@ -79,3 +83,4 @@ try:
 except KeyboardInterrupt:
     print("end")
     database.closeCursor()
+    LCDScreen.shut_down_LCD()
