@@ -83,7 +83,7 @@ class LightSensors():
             # if book was placed on right place
             if (self.detectLightToDark(beginData) != 8 and self.detectLightToDark(beginData) == right_place):
                 place_detected = 9
-                # 9 instead of "False" so no confusion with 0's and 1's is possible
+                # 9 instead of "True" so no confusion with 0's and 1's is possible
                 detected_place = 9
 
             # when a detection from light to dark took place, it returns an int

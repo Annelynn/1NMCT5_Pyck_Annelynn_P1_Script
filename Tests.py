@@ -53,6 +53,8 @@ LCDScreen = LCDScreen(21, 20, 16, 25, 24, 23)
 
 # Test LCD
 # --------------------------------------------------------------------------------------
-LCDScreen.show_text_on_second_line("test")
+
+LCDScreen.show_text_on_multiple_lines("Harry Potter and the Order of the Phoenix")
+#LCDScreen.show_text_on_one_line("test", 0)
 sleep(10)
 LCDScreen.shut_down_LCD()
