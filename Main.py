@@ -2,16 +2,16 @@ from model.DbClass import DbClass
 from model.BarcodeScanner import BarcodeScanner
 from model.LightSensors import LightSensors
 from model.LCDScreen import LCDScreen
+from model.NeoPixels import NeoPixels
 from time import sleep
-import serial
+
 
 try:
     barcodeScanner = BarcodeScanner()
     database = DbClass()
     lightSensors = LightSensors()
     LCDScreen = LCDScreen(21, 20, 16, 25, 24, 23)
-
-    ser = serial.Serial('/dev/ttyUSB0')
+    LEDstrip = NeoPixels()
 
     detected_barcode = ""
     detected_isbn = ""
@@ -33,18 +33,20 @@ try:
             if(detected_barcode != "" and detected_isbn == ""):
                 # convert barcode to ISBN
                 detected_isbn = barcodeScanner.convertBarcodeToISBN(detected_barcode)
+
+                # get right place from database
+                right_place = database.getDataFromDatabaseWithCondition("Book", "ISBN13", detected_isbn)[0][8]
+                # display the right place onto the LED strip
+                LEDstrip.write_number(right_place)
+
                 # show title of book on LCD screen
                 LCDScreen.show_text_on_multiple_lines(database.getDataFromDatabaseWithCondition("Book", "ISBN13", detected_isbn)[0][1])
-
-                right_place = database.getDataFromDatabaseWithCondition("Book", "ISBN13", detected_isbn)[0][8]
-                # this needs to be displayed on LED strip
-                ser.write(bytes(right_place))
 
         # detect place
         while(right_place != "" and detected_place == ""):
             detected_place = lightSensors.checkIfPlaceIsRight(beginDataLS, right_place)
-            # show info on LED strip
-            ser.write(bytes(detected_place))
+            # Display detected place onto LED strip
+            LEDstrip.write_number(detected_place)
 
             # book is placed on wrong place
             if(detected_place >= 0 and detected_place <= 7):
@@ -86,9 +88,10 @@ try:
         right_place = ""
         detected_place = ""
         LCDScreen.clear_screen()
+        LEDstrip.write_clear()
 
 except KeyboardInterrupt:
     print("end")
     database.closeCursor()
     LCDScreen.shut_down_LCD()
-    ser.close()
+    LEDstrip.shut_down_LED()

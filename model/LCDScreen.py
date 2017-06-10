@@ -44,7 +44,7 @@ class LCDScreen():
         for x in range(0, 4):
             GPIO.output(self.dbus[x], MSB & (1 << x))
         GPIO.output(self.E, GPIO.LOW)
-        sleep(0.1)
+        sleep(0.05)
 
         # Send LSB
         GPIO.output(self.E, GPIO.HIGH)
@@ -52,14 +52,14 @@ class LCDScreen():
         for x in range(0, 4):
             GPIO.output(self.dbus[x], LSB & (1 << x))
         GPIO.output(self.E, GPIO.LOW)
-        sleep(0.1)
+        sleep(0.05)
 
     def __init_display(self):
 
         # Function Set: set to 4bit mode
         self.__send_GPIO_bits(0x28, "instruction")
         # Display On
-        self.__send_GPIO_bits(0x0E, "instruction")
+        self.__send_GPIO_bits(0x0C, "instruction")
         # Clear Display
         self.__send_GPIO_bits(0x01, "instruction")
 

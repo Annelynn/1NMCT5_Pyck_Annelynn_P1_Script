@@ -5,12 +5,13 @@ from time import sleep
 import datetime
 
 from model.LCDScreen import LCDScreen
+from model.NeoPixels import NeoPixels
 
 database = DbClass()
 #barcodeScanner = BarcodeScanner()
 lightSensors = LightSensors()
-LCDScreen = LCDScreen(21, 20, 16, 25, 24, 23)
-
+#LCDScreen = LCDScreen(21, 20, 16, 25, 24, 23)
+LEDstrip = NeoPixels()
 
 # Test database
 # -------------------------------------------------------------------------------------
@@ -53,8 +54,16 @@ LCDScreen = LCDScreen(21, 20, 16, 25, 24, 23)
 
 # Test LCD
 # --------------------------------------------------------------------------------------
+# LCDScreen.show_text_on_multiple_lines("Harry Potter and the Order of the Phoenix")
+# #LCDScreen.show_text_on_one_line("test", 0)
+# sleep(10)
+#LCDScreen.shut_down_LCD()
+# --------------------------------------------------------------------------------------
 
-LCDScreen.show_text_on_multiple_lines("Harry Potter and the Order of the Phoenix")
-#LCDScreen.show_text_on_one_line("test", 0)
-sleep(10)
-LCDScreen.shut_down_LCD()
+# Test LED Strip
+# --------------------------------------------------------------------------------------
+# LEDstrip.write_number(1)
+# sleep(5)
+# LEDstrip.write_number(9)
+# sleep(5)
+# LEDstrip.write_clear()

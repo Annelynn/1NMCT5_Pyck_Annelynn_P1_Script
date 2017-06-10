@@ -33,8 +33,8 @@ int places[][3] = {
 };
 
 // initialise place variables
-int right_place;
-int detected_place;
+int right_place = 10;
+int detected_place = 10;
 
 // boolean to register what number got send through
 bool firstTransmission = true;
@@ -54,30 +54,36 @@ void loop() {
     // read place
     String received = Serial.readString();
     received.trim();
-    Serial.println(received);
-
+    
     // check first number that was received --> righ_place
-    if (firstTransmission == true and received.toInt() != 0) {
+    // if received can be converted to an integer, it is an integer
+    // but if string "0" gets converted, it will return 0 even if it is an integer
+    // when right_place=10 and detected_place=10 the program has been reseted
+    if ((received.toInt() != 0 or received == "0") and right_place==10 and detected_place==10) {
       // clear strip
       clear_strip();
       // convert received string to integer
       right_place = received.toInt();
       // show place
       rainbow_drops(right_place);
-      // set boolean to false so second part can be executed
-      firstTransmission = false;
+      clear_strip();
+      light_up_a_place(right_place, white);
+      strip.show();
     }
     // check second number that was received --> detected_place
     else {
-      if (firstTransmission == false and received.toInt() != 0) {
+      // when right_place!=10 and detected_place=10 the if-part of the condition has been executed
+      if ((received.toInt() != 0 or received == "0") and right_place != 10 and detected_place==10) {
         // clear strip
         clear_strip();
         // convert received string to integer
         detected_place = received.toInt();
+        
         // if right place
         if (detected_place == 9) {
           light_up_a_place(right_place, green);
         }
+        // if not right place
         else
         {
           // if borrowed
@@ -89,15 +95,16 @@ void loop() {
             light_up_a_place(detected_place, red);
           }
         }
-        // when a second value was received, another value can be read
-        if (detected_place != right_place) {
-          firstTransmission = true;
-        }
+      
+        // wait three seconds
+        delay(3000);
       }
 
       // if no number was received, clear strip
       else {
         clear_strip();
+        right_place = 10;
+        detected_place = 10;
       }
 
     }
@@ -116,15 +123,13 @@ void light_up_a_place(int place, uint32_t colour) {
 // indicate where book should be placed
 void rainbow_drops(int place) {
   for (int i = 0; i < 7; i ++) {
-    for (int j = 0; j < places[place][0] - 1; j++) {
+    for (int j = 0; j < places[place][0]; j++) {
       strip.setPixelColor(j, colours[i]);
-      //strip.setPixelColor(j-1, 0);
       strip.show();
       delay(25);
     }
-    strip.setPixelColor(places[place][0], white);
-    strip.setPixelColor(places[place][1], white);
-    strip.setPixelColor(places[place][2], white);
+    light_up_a_place(place, white);
+    strip.show();
   }
 }
 
