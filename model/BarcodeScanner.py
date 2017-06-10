@@ -29,7 +29,7 @@ class BarcodeScanner():
         # stop symbol gets included into barcode and this is unnecessary
         return barcode[:-1]
 
-    def convertBarcodeToISBN(self, barcode):
+    def convertBarcodeToNumbers(self, barcode):
         # create empty variable
         isbn = ""
 

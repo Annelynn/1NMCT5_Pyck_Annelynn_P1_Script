@@ -65,8 +65,6 @@ void loop() {
       // convert received string to integer
       right_place = received.toInt();
       // show place
-      rainbow_drops(right_place);
-      clear_strip();
       light_up_a_place(right_place, white);
       strip.show();
     }
@@ -118,19 +116,6 @@ void light_up_a_place(int place, uint32_t colour) {
     strip.show();
   }
   delay(500);
-}
-
-// indicate where book should be placed
-void rainbow_drops(int place) {
-  for (int i = 0; i < 7; i ++) {
-    for (int j = 0; j < places[place][0]; j++) {
-      strip.setPixelColor(j, colours[i]);
-      strip.show();
-      delay(25);
-    }
-    light_up_a_place(place, white);
-    strip.show();
-  }
 }
 
 // shut all leds down
