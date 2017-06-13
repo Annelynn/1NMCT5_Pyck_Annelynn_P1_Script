@@ -8,10 +8,10 @@ from model.LCDScreen import LCDScreen
 from model.NeoPixels import NeoPixels
 
 database = DbClass()
-#barcodeScanner = BarcodeScanner()
+barcodeScanner = BarcodeScanner()
 lightSensors = LightSensors()
 #LCDScreen = LCDScreen(21, 20, 16, 25, 24, 23)
-LEDstrip = NeoPixels()
+#LEDstrip = NeoPixels()
 
 # Test database
 # -------------------------------------------------------------------------------------
@@ -25,10 +25,10 @@ LEDstrip = NeoPixels()
 
 # Test database + barcode scanner
 # -------------------------------------------------------------------------------------
-# barcode = barcodeScanner.readBarcode()
-# ISBN = barcodeScanner.convertBarcodeToISBN(barcode)
-#
-# if(barcode != ""):
+barcode = barcodeScanner.readBarcode()
+ISBN = barcodeScanner.convertBarcodeToISBN(barcode)
+if(barcode != ""):
+    print(ISBN)
 #     book = database.getDataFromDatabaseWithCondition("Book", "ISBN13", ISBN)
 #     print(book[0][1])
 # -------------------------------------------------------------------------------------
@@ -67,3 +67,4 @@ LEDstrip = NeoPixels()
 # LEDstrip.write_number(9)
 # sleep(5)
 # LEDstrip.write_clear()
+
